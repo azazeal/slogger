@@ -10,6 +10,6 @@ Package `slogger` implements supporting functionality related to the
 More specifically, it implements functionality that used to exist in `exp/x/slog`, like the
 [`NewContext`](https://pkg.go.dev/github.com/azazeal/slogger#NewContext) and
 [`FromContext`](https://pkg.go.dev/github.com/azazeal/slogger#FromContext) functions, as well as new helpers like the
-`FromEnv` function.
+[`FromEnv`](https://pkg.go.dev/github.com/azazeal/slogger#FromEnv) function.
 
 For more details, you may review the package documentation [here](https://pkg.go.dev/github.com/azazeal/slogger).
