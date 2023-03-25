@@ -11,8 +11,8 @@ import (
 
 type contextKey struct{}
 
-// NewContext derives a [context.Context] from ctx that carries l. You may retrieve l by calling
-// [FromContext] on the returned [context.Context].
+// NewContext derives a [context.Context] from ctx that carries logger. You may retrieve logger by
+// calling [FromContext] on the returned [context.Context].
 func NewContext(ctx context.Context, logger *slog.Logger) context.Context {
 	return context.WithValue(ctx, contextKey{}, logger)
 }
