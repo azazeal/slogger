@@ -1,0 +1,21 @@
+name: Build Package
+
+on:
+  push:
+    tags-ignore:
+      - "**"
+    branches:
+      - master
+  pull_request:
+    types:
+      - opened
+      - synchronize
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.event.pull_request.number || github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  call-build:
+    name: Call Build Package
+    uses: azazeal/workflows/.github/workflows/gopkg.yml@master
