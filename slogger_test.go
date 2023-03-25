@@ -6,7 +6,6 @@ import (
 	"strconv"
 	"testing"
 
-	"github.com/stretchr/testify/assert"
 	"golang.org/x/exp/slog"
 )
 
@@ -16,7 +15,9 @@ func TestFromContext(t *testing.T) {
 		have = FromContext(NewContext(context.Background(), want))
 	)
 
-	assert.Same(t, want, have)
+	if want != have {
+		t.Errorf("expected %v, got %v", want, have)
+	}
 }
 
 func TestFromContextReturnsDefault(t *testing.T) {
@@ -25,13 +26,17 @@ func TestFromContextReturnsDefault(t *testing.T) {
 		have = FromContext(context.Background())
 	)
 
-	assert.Same(t, want, have)
+	if want != have {
+		t.Errorf("expected %v, got %v", want, have)
+	}
 }
 
 func TestFromContextReturnsNil(t *testing.T) {
 	have := FromContext(NewContext(context.Background(), nil))
 
-	assert.Nil(t, have)
+	if have != nil {
+		t.Errorf("expected nil, got %#v", have)
+	}
 }
 
 func TestFromEnv(t *testing.T) {
@@ -80,19 +85,19 @@ func TestFromEnv(t *testing.T) {
 			}
 
 			logger := FromEnv()
-			if have := logger.Handler(); kase.json {
-				assert.IsType(t, new(slog.JSONHandler), have)
-			} else {
-				assert.IsType(t, new(slog.TextHandler), have)
+			handler := logger.Handler()
+
+			if _, ok := handler.(*slog.JSONHandler); kase.json && !ok {
+				t.Fatalf("expected *slog.JSONHandler, got %T", handler)
+			} else if _, ok := handler.(*slog.TextHandler); !kase.json && !ok {
+				t.Fatalf("expected *slog.TextHandler, got %T", handler)
 			}
 
 			for level := slog.LevelDebug - 1; level <= slog.LevelError+1; level++ {
 				have := logger.Enabled(context.Background(), level)
 
-				if want := level >= kase.minLevel; want {
-					assert.True(t, have, "level: %s", level)
-				} else {
-					assert.False(t, have, "level: %s", level)
+				if want := level >= kase.minLevel; want != have {
+					t.Errorf("expected %t for %s, got %t", want, level, have)
 				}
 			}
 		})
