@@ -13,3 +13,40 @@ More specifically, it implements functionality that used to exist in `exp/x/slog
 [`FromEnv`](https://pkg.go.dev/github.com/azazeal/slogger#FromEnv) function.
 
 For more details, you may review the package documentation [here](https://pkg.go.dev/github.com/azazeal/slogger).
+
+## Usage
+
+```go
+package main
+
+import (
+	"context"
+
+	"github.com/azazeal/slogger"
+)
+
+func main() {
+	// grab a reference to a slog.Logger configured by the $LOG_LEVEL & $LOG_FORMAT environment
+	// variables.
+	logger := slogger.FromEnv()
+
+	// store that reference to a top-level Context that propagates throughout the program
+	ctx := slogger.NewContext(context.Background(), logger)
+
+	// pass the Context, and therefore the slog.Logger, around; log as needed
+	doSomething(ctx)
+	doSomethingElse(ctx)
+}
+
+func doSomething(ctx context.Context) {
+	logger := slogger.FromContext(ctx)
+
+	logger.Warn("did something")
+}
+
+func doSomethingElse(ctx context.Context) {
+	logger := slogger.FromContext(ctx)
+
+	logger.Info("did something else")
+}
+```
