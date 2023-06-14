@@ -3,6 +3,7 @@ package slogger
 
 import (
 	"context"
+	"io"
 	"os"
 	"strings"
 
@@ -27,18 +28,27 @@ func FromContext(ctx context.Context) *slog.Logger {
 	return slog.Default()
 }
 
-// FromEnv returns a reference to a [slog.Logger] that'll write to [os.Stderr] with verbosity
-// and format configured by the $LOG_LEVEL & $LOG_FORMAT environment variables respectively.
+// FromEnv returns a reference to a [slog.Logger] that'll write records to [os.Stderr] with
+// verbosity and format configured by the LOG_LEVEL & LOG_FORMAT environment variables,
+// respectively. It's essentially a shortcut to calling [FromEnvWithWriter] with [os.Stderr] as the
+// argument.
 func FromEnv() *slog.Logger {
+	return FromEnvWithWriter(os.Stderr)
+}
+
+// FromEnvWithWriter returns a reference to a [slog.Logger] that'll write records to the provided
+// [io.Writer] with verbosity and format configured by the LOG_LEVEL & LOG_FORMAT environment
+// variables, respectively.
+func FromEnvWithWriter(w io.Writer) *slog.Logger {
 	opt := slog.HandlerOptions{
 		Level: logLevelFromEnv(),
 	}
 
 	var handler slog.Handler
 	if logJSONFromEnv() {
-		handler = opt.NewJSONHandler(os.Stderr)
+		handler = opt.NewJSONHandler(w)
 	} else {
-		handler = opt.NewTextHandler(os.Stderr)
+		handler = opt.NewTextHandler(w)
 	}
 
 	return slog.New(handler)
