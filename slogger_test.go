@@ -3,10 +3,9 @@ package slogger
 import (
 	"context"
 	"io"
+	"log/slog"
 	"strconv"
 	"testing"
-
-	"golang.org/x/exp/slog"
 )
 
 func TestFromContext(t *testing.T) {

@@ -5,12 +5,7 @@
 # slogger
 
 Package `slogger` implements supporting functionality related to the
-[`exp/x/slog`](https://pkg.go.dev/golang.org/x/exp/slog) package.
-
-More specifically, it implements functionality that used to exist in `exp/x/slog`, like the
-[`NewContext`](https://pkg.go.dev/github.com/azazeal/slogger#NewContext) and
-[`FromContext`](https://pkg.go.dev/github.com/azazeal/slogger#FromContext) functions, as well as new helpers like the
-[`FromEnv`](https://pkg.go.dev/github.com/azazeal/slogger#FromEnv) function.
+[`log/slog`](https://pkg.go.dev/golang.org/log/slog) package.
 
 For more details, you may review the package documentation [here](https://pkg.go.dev/github.com/azazeal/slogger).
 

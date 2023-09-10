@@ -4,10 +4,9 @@ package slogger
 import (
 	"context"
 	"io"
+	"log/slog"
 	"os"
 	"strings"
-
-	"golang.org/x/exp/slog"
 )
 
 type contextKey struct{}
