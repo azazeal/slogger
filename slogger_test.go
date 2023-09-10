@@ -11,7 +11,7 @@ import (
 
 func TestFromContext(t *testing.T) {
 	var (
-		want = slog.New(slog.NewTextHandler(io.Discard))
+		want = slog.New(slog.NewTextHandler(io.Discard, nil))
 		have = FromContext(NewContext(context.Background(), want))
 	)
 

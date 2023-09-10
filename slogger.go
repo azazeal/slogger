@@ -12,14 +12,16 @@ import (
 
 type contextKey struct{}
 
-// NewContext derives a [context.Context] from ctx that carries logger. You may retrieve logger by
-// calling [FromContext] on the returned [context.Context].
+// NewContext derives a [context.Context] from ctx that carries the provided [slog.Logger]
+// reference. Callers may retrieve the reference to the provided [slog.Logger] by calling
+// [FromContext] on the returned [context.Context].
 func NewContext(ctx context.Context, logger *slog.Logger) context.Context {
 	return context.WithValue(ctx, contextKey{}, logger)
 }
 
-// FromContext returns the [slog.Logger] ctx carries. In case ctx carries no [slog.Logger] calling
-// FromContext is a passthrough call to [slog.Default].
+// FromContext returns the [slog.Logger] reference the provided [context.Context] carries. In case
+// the provided [context.Context] carries no [slog.Logger] reference, calling FromContext is a
+// passthrough call to [slog.Default].
 func FromContext(ctx context.Context) *slog.Logger {
 	if logger, ok := ctx.Value(contextKey{}).(*slog.Logger); ok {
 		return logger
@@ -30,8 +32,7 @@ func FromContext(ctx context.Context) *slog.Logger {
 
 // FromEnv returns a reference to a [slog.Logger] that'll write records to [os.Stderr] with
 // verbosity and format configured by the LOG_LEVEL & LOG_FORMAT environment variables,
-// respectively. It's essentially a shortcut to calling [FromEnvWithWriter] with [os.Stderr] as the
-// argument.
+// respectively. It's shorthand for calling [FromEnvWithWriter] with [os.Stderr] as the argument.
 func FromEnv() *slog.Logger {
 	return FromEnvWithWriter(os.Stderr)
 }
@@ -46,9 +47,9 @@ func FromEnvWithWriter(w io.Writer) *slog.Logger {
 
 	var handler slog.Handler
 	if logJSONFromEnv() {
-		handler = opt.NewJSONHandler(w)
+		handler = slog.NewJSONHandler(w, &opt)
 	} else {
-		handler = opt.NewTextHandler(w)
+		handler = slog.NewTextHandler(w, &opt)
 	}
 
 	return slog.New(handler)
