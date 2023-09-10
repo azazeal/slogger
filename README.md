@@ -5,7 +5,7 @@
 # slogger
 
 Package `slogger` implements supporting functionality related to the
-[`log/slog`](https://pkg.go.dev/golang.org/log/slog) package.
+[`log/slog`](https://pkg.go.dev/log/slog) package.
 
 For more details, you may review the package documentation [here](https://pkg.go.dev/github.com/azazeal/slogger).
 
